@@ -49,7 +49,7 @@ window.addEventListener('DOMContentLoaded', () => {
       break;
     case 'weakpass':
       showToast(
-        '❌ Weak password: 8+ chars, upper & lower, number, special, no email name.',
+        '❌ Weak password',
         'error'
       );
       container.classList.add('right-panel-active');          // stay on Sign‑Up
