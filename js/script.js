@@ -9,13 +9,14 @@ document.getElementById('signIn').addEventListener('click', () => {
 });
 
 function togglePassword(eyeIcon) {
-    const input = eyeIcon.previousElementSibling;
-    if(input.type === "password"){
-        eyeIcon.classList.toggle('fa-eye-slash');
-    }
-    else{
-        eyeIcon.classList.toggle('fa-eye');
-    }
+  const input = eyeIcon.previousElementSibling;
+  if (input.type === "password") {
+    input.type = "text";
+    eyeIcon.textContent = '🙈';
+  } else {
+    input.type = "password";
+    eyeIcon.textContent = '👁️';
+  }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
