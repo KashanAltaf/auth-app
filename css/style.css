@@ -275,3 +275,73 @@ button.ghost {
     color: #555;
     font-size: 13px;
 }
+
+/* ---------- OTP Screen ---------- */
+.otp-container {
+  background: #fff;
+  width: 400px;
+  margin: 80px auto;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  animation: slideIn 0.5s ease-out;
+  text-align: center;
+}
+
+.otp-container h2 {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.otp-container p {
+  font-size: 14px;
+  margin-bottom: 25px;
+  color: #555;
+}
+
+.otp-boxes {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.otp-boxes input {
+  width: 55px;
+  height: 55px;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+  text-align: center;
+  font-size: 28px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.otp-boxes input:focus {
+  border-color: #ff416c;
+}
+
+.otp-container button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background-color: #ff416c;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.otp-container button:hover {
+  background-color: #ff4b2b;
+}
+
+.slide-in {
+  animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+  from { opacity:0; transform: translateY(20px); }
+  to   { opacity:1; transform: translateY(0); }
+}

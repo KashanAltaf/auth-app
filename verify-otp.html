@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Enter OTP</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"/>
+  <script defer src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+</head>
+<body class="otp-container slide-in">
+    <form id="otpForm">
+        <h2>Enter OTP</h2>
+        <p>We've sent a 4-digit code to <span id="userEmail"></span></p>
+        <div class="otp-boxes">
+            <input type="text" maxlength="1" pattern="[0=9]" />
+            <input type="text" maxlength="1" pattern="[0=9]" />
+            <input type="text" maxlength="1" pattern="[0=9]" />
+            <input type="text" maxlength="1" pattern="[0=9]" />
+        </div>
+        <button type="submit">Verify</button>
+        <a href="/forgot-password.html" class="back-link">🔙</a>
+    </form>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const userEmail = params.get("email") || "";
+        document.getElementById("userEmail").textContent = userEmail;
+
+        const boxes = [...document.querySelectorAll(".otp-boxes input")];
+        boxes.forEach((box, i) => {
+            box.addEventListener("input", e => {
+                e.target.value = e.target.value.replace(/[^0-9]/g,"");
+                if(e.target.value && i < boxes.length-1) boxes[i-1].focus();
+            });
+            box.addEventListener("keydown", e => {
+                if(e.key === "Backspace" && !box.value && i > 0) boxes[i-1].focus();
+            });
+        });
+
+        document.getElementById("otpForm").addEventListener("submit", e => {
+            e.preventDefault();
+            const otp = boxes.map(b => b.value).join("");
+            if(otp.length != 4){
+                Toastify({
+                    text: "Please enter al 4 digits.",
+                    duration: 3000,
+                    gravity: 'top',
+                    position: 'center',
+                    backgroundColor: '#e74c3c'
+                }).showToast();
+                return;
+            }
+            window.location.href = `/reset-password.html?email=${encodeURIComponent(userEmail)}`;
+        });
+    </script>
+</body>
