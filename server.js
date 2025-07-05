@@ -31,6 +31,10 @@ const userSchema = new mongoose.Schema({
 });
 const User = mongoose.model('User', userSchema);
 
+app.get('/ping', (req, res) => {
+  res.send('pong');
+});
+
 // 5. Middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -47,11 +51,11 @@ app.use(session({
 }));
 
 // 6. Serve static files
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '')));
 
 // 7. Explicit root route (guarantees index.html on GET /)
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, '', 'index.html'));
 });
 
 // 8. Registration route
