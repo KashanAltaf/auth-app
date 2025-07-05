@@ -65,7 +65,7 @@ app.post('/register', async (req, res) => {
   try {
     /* ---------- 1. basic length check ---------- */
     if (!email || !password || password.length < 8) {
-      return res.redirect('/?error=weakpass');
+      return res.redirect('/?signup=true&error=weakpass');
     }
 
     /* ---------- 2. character–class rules ---------- */
@@ -75,7 +75,7 @@ app.post('/register', async (req, res) => {
       /[0-9]/.test(password) &&      // number
       /[^A-Za-z0-9]/.test(password); // special
 
-    if (!strong) return res.redirect('/?error=weakpass');
+    if (!strong) return res.redirect('/?signup=true&error=weakpass');
 
     /* ---------- 3. “contains‑name” rule ---------- */
     const userPart = email.split('@')[0]          // ahmedali123
@@ -91,11 +91,11 @@ app.post('/register', async (req, res) => {
       if (passLower.includes(chunk)) containsName = true;
     }
 
-    if (containsName) return res.redirect('/?error=weakpass');
+    if (containsName) return res.redirect('/?signup=true&error=weakpass');
 
     /* ---------- 4. unique e‑mail check ---------- */
     if (await User.findOne({ email })) {
-      return res.redirect('/?error=register');
+      return res.redirect('/?signup=true&error=register');
     }
 
     /* ---------- 5. save user & redirect to login ---------- */
@@ -106,7 +106,7 @@ app.post('/register', async (req, res) => {
 
   } catch (err) {
     console.error(err);
-    res.redirect('/?error=register');
+    res.redirect('/?signup=true&error=register');
   }
 });
 

@@ -24,7 +24,7 @@ function showToast(message, type='info'){
         text: message,
         duration: 4000,
         gravity: 'top',
-        position: 'right',
+        position: 'center',
         style: {
             background: type === 'success'
             ? '#2ecc71'
