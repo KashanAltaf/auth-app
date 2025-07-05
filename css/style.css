@@ -198,51 +198,39 @@ button.ghost {
     to {opacity: 1; transform: translateY(0);}
 }
 
-input-group {
-    position: relative;
-    margin: 15px 0;
+.input-group {
+  position: relative;
+  margin-bottom: 12px;
+  width: 100%;
 }
 
+
 .input-group input {
-    width: 100%;
-    padding: 12px 45px 12px 40px;
-    border: none;
-    border-radius: 30px;
-    background-color: #f1f1f1;
-    font-size: 14px;
-    outline: none;
-    box-sizing: border-box;
+  width: 100%;
+  padding: 12px 40px 12px 40px; /* left + right padding for icon space */
+  border: none;
+  border-radius: 30px;
+  background-color: #f1f1f1;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
 }
 
 .input-group .icon {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 16px;
-    color: #666;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #666;
+  pointer-events: none;
 }
 
 .input-group .icon.eye {
-    right: 15px;
-    cursor: pointer;
+  right: 15px;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .input-group .icon:not(.eye) {
-    left: 15px;
-}
-
-button {
-    border: none;
-    border-radius: 30px;
-    padding: 12px 30px;
-    background-color: #ff3c3c;
-    color: #fff;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-button:hover {
-    background-color: #e52e2e;
+  left: 15px;
 }
