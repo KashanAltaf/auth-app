@@ -141,6 +141,41 @@ app.post('/login', parseForm, async (req, res) => {
   }
 });
 
+//Reset Password route
+app.post('/reset-password', async (req, res) => {
+  const { email, newPassword } = req.body;
+
+  if (!email || !newPassword || newPassword.length < 8) {
+    return res.json({ ok: false, err: 'weakpass' });
+  }
+
+  const strong =
+    /[A-Z]/.test(newPassword) &&
+    /[a-z]/.test(newPassword) &&
+    /[0-9]/.test(newPassword) &&
+    /[^A-Za-z0-9]/.test(newPassword);
+
+  const userPart = email.split('@')[0].replace(/[^a-z]/gi, '').toLowerCase();
+  const passLower = newPassword.toLowerCase();
+  let containsName = false;
+
+  for (let i = 0; i <= userPart.length - 3 && !containsName; i++) {
+    const chunk = userPart.slice(i, i + 3);
+    if (passLower.includes(chunk)) containsName = true;
+  }
+
+  if (!strong || containsName) return res.json({ ok: false, err: 'weakpass' });
+
+  try {
+    const passwordHash = await bcrypt.hash(newPassword, 12);
+    await User.updateOne({ email }, { $set: { passwordHash } });
+    return res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    return res.json({ ok: false, err: 'server' });
+  }
+});
+
 
 //Protected welcome page
 app.get('/welcome.html', (req, res, next) => {
