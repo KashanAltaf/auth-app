@@ -5,7 +5,7 @@ document.getElementById('signUp').addEventListener('click', () => {
 });
 
 document.getElementById('signIn').addEventListener('click', () => {
-    container.classList.add('right-panel-active');
+    container.classList.remove('right-panel-active');
 });
 
 window.addEventListener('DOMContentLoaded', () => {
