@@ -60,40 +60,56 @@ app.get('/', (req, res) => {
 
 // 8. Registration route
 app.post('/register', async (req, res) => {
-    const { email, password } = req.body;                  
-    try {
-        const existing = await User.findOne({ email });
-        if (!email || !password || password.length < 8) {
-            return res.redirect('/?error=register');
-        }
-        //Enforcing password rules
-        const usernamePart = email.split('@')[0];
-        const nameFrags = usernamePart.match(/[a-zA-Z]+/g) || [];
-        const passRules = [
-            /[A-Z]/,        //atleast one upperCase
-            /[a-z]/,        //atleast one lowerCase
-            /[0-9]/,        //atleast one number
-            /[^A-Za-z0-9]/  //atleast one special character
-        ];
+  const { email, password } = req.body;
 
-        const isStrong = passRules.every(rule => rule.test(password));
-        const containsName = nameFrags.some(name => password.toLowerCase().includes(name.toLowerCase()));
-        if(!isStrong || containsName){
-            return res.redirect('/?error=weakpass');
-        }
-
-        //Checking for existing user
-        const passwordHash = await bcrypt.hash(password, 12);
-        await User.create({email, passwordHash});
-
-        //Redirecting to login
-        res.redirect('/?registered=true');
-
-    } catch (err) {
-        console.error(err);
-        res.redirect('/?error=register');
+  try {
+    /* ---------- 1. basic length check ---------- */
+    if (!email || !password || password.length < 8) {
+      return res.redirect('/?error=weakpass');
     }
+
+    /* ---------- 2. character–class rules ---------- */
+    const strong =
+      /[A-Z]/.test(password) &&      // uppercase
+      /[a-z]/.test(password) &&      // lowercase
+      /[0-9]/.test(password) &&      // number
+      /[^A-Za-z0-9]/.test(password); // special
+
+    if (!strong) return res.redirect('/?error=weakpass');
+
+    /* ---------- 3. “contains‑name” rule ---------- */
+    const userPart = email.split('@')[0]          // ahmedali123
+                          .replace(/[^a-z]/gi,'') // only letters → ahmedali
+                          .toLowerCase();
+
+    const passLower = password.toLowerCase();
+    let containsName = false;
+
+    // check every 3‑char (or longer) chunk of userPart
+    for (let i = 0; i <= userPart.length - 3 && !containsName; i++) {
+      const chunk = userPart.slice(i, i + 3);     // e.g. "ahm", "hme", ...
+      if (passLower.includes(chunk)) containsName = true;
+    }
+
+    if (containsName) return res.redirect('/?error=weakpass');
+
+    /* ---------- 4. unique e‑mail check ---------- */
+    if (await User.findOne({ email })) {
+      return res.redirect('/?error=register');
+    }
+
+    /* ---------- 5. save user & redirect to login ---------- */
+    const passwordHash = await bcrypt.hash(password, 12);
+    await User.create({ email, passwordHash });
+
+    res.redirect('/?registered=true');
+
+  } catch (err) {
+    console.error(err);
+    res.redirect('/?error=register');
+  }
 });
+
 
 // 9. Login route
 app.post('/login', async (req, res) => {
