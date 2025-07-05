@@ -9,7 +9,7 @@
     document.getElementById('signupForm').addEventListener('submit', async(e) => {
         e.preventDefault();
         const data = Object.fromEntries(new FormData(e.target));
-        const res = await fetch('https://localhost:5000/api/auth/signup', {
+        const res = await fetch('https://localhost:5500/api/auth/signup', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
