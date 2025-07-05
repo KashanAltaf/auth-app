@@ -8,19 +8,36 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"/>
   <script defer src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </head>
-<body class="otp-container slide-in">
-    <form id="otpForm">
-        <h2>Enter OTP</h2>
-        <p>We've sent a 4-digit code to <span id="userEmail"></span></p>
-        <div class="otp-boxes">
-            <input type="text" maxlength="1" pattern="[0=9]" />
-            <input type="text" maxlength="1" pattern="[0=9]" />
-            <input type="text" maxlength="1" pattern="[0=9]" />
-            <input type="text" maxlength="1" pattern="[0=9]" />
-        </div>
-        <button type="submit">Verify</button>
-        <a href="/forgot-password.html" class="back-link">🔙</a>
-    </form>
+<body>
+    <main class="otp-card-container">
+        <form id="otpForm" class="otp-form-card">
+            <h2>Enter OTP</h2>
+            <p>We've sent a 4-digit code to<br><strong id="userEmail"></strong></p>
+            
+            <div id="otp-input-group" class="otp-input-group">
+                <p class="otp-input-label" id="otp-label">Verification Code</p>
+                <div class="otp-boxes" role="group" aria-labelledby="otp-label">
+                    <input type="text" class="otp-box" inputmode="numeric" pattern="[0-9]" maxlength="1" aria-label="First digit" />
+                    <input type="text" class="otp-box" inputmode="numeric" pattern="[0-9]" maxlength="1" aria-label="Second digit" />
+                    <input type="text" class="otp-box" inputmode="numeric" pattern="[0-9]" maxlength="1" aria-label="Third digit" />
+                    <input type="text" class="otp-box" inputmode="numeric" pattern="[0-9]" maxlength="1" aria-label="Fourth digit" />
+                </div>
+            </div>
+            
+            <button type="submit" id="submitButton">Verify</button>
+            
+            <div class="otp-resend-container">
+                Didn't receive code? 
+                <a href="#" id="resendLink" class="otp-resend-link disabled" aria-disabled="true">Resend</a>
+                <span id="timer" class="timer"></span>
+            </div>
+            
+            <a href="/forgot-password.html" class="back-link" aria-label="Back to previous page">
+                <span aria-hidden="true">🔙</span> Back
+            </a>
+        </form>
+    </main>
+
 
     <script>
         const params = new URLSearchParams(window.location.search);
