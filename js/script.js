@@ -23,7 +23,13 @@ window.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     if(params.get('error')){
         alert(params.get('error') === 'login'
-        ? 'Invalid credentials, try again.'
-        : 'Registration failed, email may already exist');
+        ? '⚠️ Invalid credentials, try again.'
+        : '⚠️ Registration failed, email may already exist');
     }
+    if(params.get('registered')){
+        alert('✅ Registration successful! Please log in.');
+    }
+    if(params.get('error') === 'weakpass'){
+        alert('❌ Password too weak!\n\nMust be 8+ characters');
+    };
 });

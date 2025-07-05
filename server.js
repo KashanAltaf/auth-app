@@ -60,25 +60,44 @@ app.get('/', (req, res) => {
 
 // 8. Registration route
 app.post('/register', async (req, res) => {
-  const { email, password } = req.body;                  // <-- destructure
-  try {
-    const existing = await User.findOne({ email });
-    if (existing) {
-      return res.redirect('/?error=register');
+    const { email, password } = req.body;                  
+    try {
+        const existing = await User.findOne({ email });
+        if (!email || !password || password.length < 8) {
+            return res.redirect('/?error=register');
+        }
+        //Enforcing password rules
+        const usernamePart = email.split('@')[0];
+        const nameFrags = usernamePart.match(/[a-zA-Z]+/g) || [];
+        const passRules = [
+            /[A-Z]/,        //atleast one upperCase
+            /[a-z]/,        //atleast one lowerCase
+            /[0-9]/,        //atleast one number
+            /[^A-Za-z0-9]/  //atleast one special character
+        ];
+
+        const isStrong = passRules.every(rule => rule.test(password));
+        const containsName = nameFrags.some(name => password.toLowerCase().includes(name.toLowerCase()));
+        if(!isStrong || containsName){
+            return res.redirect('/?error=weakpass');
+        }
+
+        //Checking for existing user
+        const passwordHash = await bcrypt.hash(password, 12);
+        await User.create({email, passwordHash});
+
+        //Redirecting to login
+        res.redirect('/?registered=true');
+
+    } catch (err) {
+        console.error(err);
+        res.redirect('/?error=register');
     }
-    const passwordHash = await bcrypt.hash(password, 12);
-    await User.create({ email, passwordHash });
-    req.session.user = { email };
-    res.redirect('/welcome.html');
-  } catch (err) {
-    console.error(err);
-    res.redirect('/?error=register');
-  }
 });
 
 // 9. Login route
 app.post('/login', async (req, res) => {
-  const { email, password } = req.body;                  // <-- destructure
+  const { email, password } = req.body;                  
   try {
     const user = await User.findOne({ email });
     if (user && await bcrypt.compare(password, user.passwordHash)) {
