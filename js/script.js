@@ -19,17 +19,45 @@ function togglePassword(eyeIcon) {
   }
 }
 
+function showToast(message, type='info'){
+    Toastify({
+        text: message,
+        duration: 4000,
+        gravity: 'top',
+        position: 'right',
+        style: {
+            background: type === 'success'
+            ? '#2ecc71'
+            : type === 'error'
+            ? '#e74c3c'
+            : '#3498db'
+        },
+        close: true
+    }).showToast();
+}
+
 window.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    if(params.get('error')){
-        alert(params.get('error') === 'login'
-        ? '⚠️ Invalid credentials, try again.'
-        : '⚠️ Registration failed, email may already exist');
-    }
-    if(params.get('registered')){
-        alert('✅ Registration successful! Please log in.');
-    }
-    if(params.get('error') === 'weakpass'){
-        alert('❌ Password too weak!\n\nMust be 8+ characters');
-    };
+  const params = new URLSearchParams(window.location.search);
+
+  switch (params.get('error')) {
+    case 'login':
+      showToast('❌ Invalid login. Please try again.', 'error');
+      break;
+    case 'register':
+      showToast('❌ Email already exists. Choose another.', 'error');
+      container.classList.add('right-panel-active');          // stay on Sign‑Up
+      break;
+    case 'weakpass':
+      showToast(
+        '❌ Weak password: 8+ chars, upper & lower, number, special, no email name.',
+        'error'
+      );
+      container.classList.add('right-panel-active');          // stay on Sign‑Up
+      break;
+  }
+
+  if (params.get('registered') === 'true') {
+    showToast('✅ Registration successful! Please log in.', 'success');
+    container.classList.remove('right-panel-active');         // back to Sign‑In
+  }
 });
