@@ -415,27 +415,41 @@ button.ghost {
     text-align: center;
     font-size: 0.9rem;
     color: #555;
+    margin-top: 10px;
 }
 
+/* Hide resend link by default; only show when no longer .disabled */
 .otp-resend-link {
+    visibility: hidden;
     font-weight: 600;
-    color: #ff416c;
     text-decoration: none;
     transition: color 0.2s;
 }
 
-.otp-resend-link:hover {
-    text-decoration: underline;
+.otp-resend-link:not(.disabled) {
+    visibility: visible;
+    color: #ff416c;
     cursor: pointer;
 }
 
-.otp-resend-link.disabled {
-    color: #999;
-    pointer-events: none;
-    text-decoration: none;
+.otp-resend-link:hover {
+    text-decoration: underline;
 }
 
+/* Timer styling */
 .timer {
     font-weight: 600;
-    margin-left: 5px;
+    margin-left: 8px;
+    visibility: visible;
+}
+
+/* Hide timer when empty */
+.timer:empty {
+    visibility: hidden;
+}
+
+/* Animation for the form appearing */
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
