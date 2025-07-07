@@ -51,7 +51,7 @@ app.use(session({
 }));
 
 // Serve static files (HTML, CSS, JS)
-app.use(express.static(path.join(__dirname, '')));
+app.use(express.static(path.join(__dirname, '../client')));
 
 // Helper to respond JSON for fetch or redirect for form submits
 function jsonOrRedirect(req, res, payload, redirectUrl) {
@@ -86,7 +86,7 @@ function authenticateJWT(req, res, next) {
 
 // Root → index.html
 app.get('/', (_req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, '../client/index.html'));
 });
 
 // Register route (now accepts role)
@@ -245,7 +245,7 @@ app.post('/reset_password', parseForm, async (req, res) => {
 
 // Protected welcome page (JWT)
 app.get('/welcome.html', authenticateJWT, (req, res) => {
-  res.sendFile(path.join(__dirname, 'welcome.html'));
+  res.sendFile(path.join(__dirname, '../client/welcome.html'));
 });
 
 // Start server
