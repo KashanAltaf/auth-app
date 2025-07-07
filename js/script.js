@@ -34,7 +34,7 @@ function showToast(message, type = 'info') {
     style: {
       background:
         type === 'success' ? '#2ecc71'
-        : type === 'error' ? '#e74c3c'
+        : type === 'error'   ? '#e74c3c'
         : '#3498db'
     }
   }).showToast();
@@ -49,7 +49,9 @@ document.getElementById('signupForm').addEventListener('submit', async e => {
     method: 'POST',
     headers: { 'x-requested-with': 'fetch' },
     body: formData
-  }).then(r => r.json()).catch(() => ({ ok:false, err:'network' }));
+  })
+  .then(r => r.json())
+  .catch(() => ({ ok: false, err: 'network' }));
 
   if (res.ok) {
     showToast('✅ Registration successful! Please log in.', 'success');
@@ -76,10 +78,14 @@ document.getElementById('loginForm').addEventListener('submit', async e => {
     method: 'POST',
     headers: { 'x-requested-with': 'fetch' },
     body: formData
-  }).then(r => r.json()).catch(() => ({ ok:false, err:'network' }));
+  })
+  .then(r => r.json())
+  .catch(() => ({ ok: false, err: 'network' }));
 
-  if (res.ok) {
-    window.location.href = '/welcome.html';          // only on success
+  if (res.ok && res.token) {
+    // store JWT for later authenticated requests
+    localStorage.setItem('token', res.token);
+    window.location.href = '/welcome.html';
   } else {
     showToast('❌ Invalid login. Please try again.', 'error');
   }
