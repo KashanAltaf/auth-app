@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +8,8 @@
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"/>
   <script defer src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script defer src="js/script.js"></script>
 </head>
 <body>
   <div class="container" id="container">
@@ -40,6 +43,18 @@
           </div>
         </div>
 
+        <!-- Role selector -->
+      <div class="input-group">
+        <label class="input-label">Role</label>
+        <div class="role-toggle">
+          <input type="radio" id="role-user"  name="role" value="user"  checked />
+          <label for="role-user">User</label>
+
+          <input type="radio" id="role-admin" name="role" value="admin" />
+          <label for="role-admin">Admin</label>
+        </div>
+      </div>
+
         <button type="submit">Sign Up</button>
       </form>
     </div>
@@ -65,11 +80,11 @@
             <span class="icon eye" onclick="togglePassword(this)">👁️</span>
           </div>
         </div>
+
         <button type="submit">Sign In</button>
         <div class="actions">
-            <a href="forgot-password.html" class="forgot-link">Forgot Password?</a>
+          <a href="forgot-password.html" class="forgot-link">Forgot Password?</a>
         </div>
-
       </form>
     </div>
 

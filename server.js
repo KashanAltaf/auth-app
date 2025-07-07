@@ -8,6 +8,7 @@ const MongoStore = require('connect-mongo');
 const multer     = require('multer');
 const path       = require('path');
 const nodemailer = require('nodemailer');
+const jwt        = require('jsonwebtoken');
 
 // Initialize Express
 const app  = express();
@@ -24,10 +25,11 @@ mongoose.connect(process.env.MONGODB_URI, {
   process.exit(1);
 });
 
-// Define User schema & model
+// Define User schema & model (with role)
 const userSchema = new mongoose.Schema({
   email:        { type: String, required: true, unique: true },
   passwordHash: { type: String, required: true },
+  role:         { type: String, enum: ['user','admin'], default: 'user' },
   createdAt:    { type: Date,   default: Date.now }
 });
 const User = mongoose.model('User', userSchema);
@@ -68,16 +70,28 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+// JWT auth middleware
+function authenticateJWT(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) return res.sendStatus(401);
+  const token = authHeader.split(' ')[1];
+  jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
+    if (err) return res.sendStatus(403);
+    req.user = payload;   // contains email & role
+    next();
+  });
+}
+
 // Routes
 
-// Root -> index.html
+// Root → index.html
 app.get('/', (_req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Register route
+// Register route (now accepts role)
 app.post('/register', parseForm, async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, role = 'user' } = req.body;
   try {
     // Validate presence & length
     if (!email || !password || password.length < 8) {
@@ -115,9 +129,9 @@ app.post('/register', parseForm, async (req, res) => {
         '/?signup=true&error=register'
       );
     }
-    // Hash & save user
+    // Hash & save user (with role)
     const passwordHash = await bcrypt.hash(password, 12);
-    await User.create({ email, passwordHash });
+    await User.create({ email, passwordHash, role });
     return jsonOrRedirect(req, res,
       { ok: true, registered: true },
       '/?registered=true'
@@ -131,17 +145,19 @@ app.post('/register', parseForm, async (req, res) => {
   }
 });
 
-// Login route
+// Login route (issues JWT)
 app.post('/login', parseForm, async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
     if (user && await bcrypt.compare(password, user.passwordHash)) {
-      req.session.user = { email };
-      return jsonOrRedirect(req, res,
-        { ok: true },
-        '/welcome.html'
+      // Issue JWT containing email & role
+      const token = jwt.sign(
+        { email: user.email, role: user.role },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' }
       );
+      return res.json({ ok: true, token });
     }
     return jsonOrRedirect(req, res,
       { ok: false, err: 'login' },
@@ -156,21 +172,17 @@ app.post('/login', parseForm, async (req, res) => {
   }
 });
 
-// Send OTP route
+// Send OTP route (unchanged)
 app.post('/send-otp', parseForm, async (req, res) => {
   const { email } = req.body;
-  // Verify user exists
   const user = await User.findOne({ email });
   if (!user) {
     return res.json({ ok: false, err: 'no_user' });
   }
-  // Generate & store OTP
   const otp = Math.floor(1000 + Math.random() * 9000).toString();
   req.session.otpEmail  = email;
   req.session.otp       = otp;
-  req.session.otpExpiry = Date.now() + 5 * 60 * 1000; // 5 minutes
-
-  // Send email
+  req.session.otpExpiry = Date.now() + 5 * 60 * 1000;
   try {
     await transporter.sendMail({
       from:    process.env.GMAIL_USER,
@@ -185,7 +197,7 @@ app.post('/send-otp', parseForm, async (req, res) => {
   }
 });
 
-// Verify OTP route
+// Verify OTP route (unchanged)
 app.post('/verify-otp', parseForm, (req, res) => {
   const { email, otp: userOtp } = req.body;
   if (email !== req.session.otpEmail) {
@@ -197,20 +209,18 @@ app.post('/verify-otp', parseForm, (req, res) => {
   if (userOtp !== req.session.otp) {
     return res.json({ ok: false, err: 'invalid' });
   }
-  // Clear OTP data
   delete req.session.otp;
   delete req.session.otpExpiry;
   delete req.session.otpEmail;
   return res.json({ ok: true });
 });
 
-// Reset Password route
+// Reset Password route (unchanged)
 app.post('/reset_password', parseForm, async (req, res) => {
   const { email, newPassword } = req.body;
   if (!email || !newPassword || newPassword.length < 8) {
     return res.json({ ok: false, err: 'weakpass' });
   }
-  // Strength checks
   const strong = /[A-Z]/.test(newPassword)
               && /[a-z]/.test(newPassword)
               && /[0-9]/.test(newPassword)
@@ -219,17 +229,11 @@ app.post('/reset_password', parseForm, async (req, res) => {
     return res.json({ ok: false, err: 'weakpass' });
   }
   try {
-    // 1. Fetch current hash
     const user = await User.findOne({ email });
-    if (!user) {
-      return res.json({ ok: false, err: 'no_user' });
-    }
-    // 2. Prevent same-as-old
-    const same = await bcrypt.compare(newPassword, user.passwordHash);
-    if (same) {
+    if (!user) return res.json({ ok: false, err: 'no_user' });
+    if (await bcrypt.compare(newPassword, user.passwordHash)) {
       return res.json({ ok: false, err: 'samepass' });
     }
-    // 3. Hash & update
     const passwordHash = await bcrypt.hash(newPassword, 12);
     await User.updateOne({ email }, { $set: { passwordHash } });
     return res.json({ ok: true });
@@ -239,11 +243,9 @@ app.post('/reset_password', parseForm, async (req, res) => {
   }
 });
 
-
-// Protected welcome page
-app.get('/welcome.html', (req, res, next) => {
-  if (req.session.user) return next();
-  res.redirect('/');
+// Protected welcome page (JWT)
+app.get('/welcome.html', authenticateJWT, (req, res) => {
+  res.sendFile(path.join(__dirname, 'welcome.html'));
 });
 
 // Start server

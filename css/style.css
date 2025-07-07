@@ -242,6 +242,51 @@ button.ghost {
   margin-top: 12px;
 }
 
+.role-toggle {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem;
+  background: #f1f1f1;
+  border-radius: 30px;
+  align-items: center;
+  justify-content: center;  /* center the pills horizontally */
+  max-width: 300px;         /* optional: control total width */
+  width: 100%;              /* takes full available or up to max-width */
+  margin: 0 auto;           /* auto‑center within parent */
+}
+
+/* Hide native radio inputs */
+.role-toggle input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Style the labels as pills */
+.role-toggle label {
+  cursor: pointer;
+  padding: 8px 20px;
+  border-radius: 20px;
+  background: transparent;
+  border: 2px solid #ccc;
+  font-size: 0.9rem;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  user-select: none;
+}
+
+/* Checked state */
+.role-toggle input[type="radio"]:checked + label {
+  background: #ff416c;
+  border-color: #ff416c;
+  color: #fff;
+}
+
+/* Hover effect */
+.role-toggle label:hover {
+  border-color: #ff416c;
+}
+
 .forgot-link {
   margin-top: 10px;
   font-size: 13px;
