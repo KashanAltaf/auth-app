@@ -675,3 +675,7 @@ button.ghost {
     padding: 12px 0;
   }
 }
+
+[hidden] {
+  display: none !important;
+}
