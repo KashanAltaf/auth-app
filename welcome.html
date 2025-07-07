@@ -7,28 +7,36 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body class="welcome-page">
+
+  <header class="header">
+    <h2>Welcome, <span id="roleText">User</span>!</h2>
+    <button class="logout-btn" id="logoutBtn">Logout</button>
+  </header>
+
   <div class="welcome-box">
-    <h1>Welcome, <span id="roleText">Guest</span>!</h1>
     <p>You have successfully logged in.</p>
   </div>
 
   <script>
-    // 1. Grab token (redirect if missing)
+    // Redirect to login if no token
     const token = localStorage.getItem('token');
     if (!token) {
       window.location.href = '/';
-      throw new Error('No auth token');
+      throw new Error('Not authenticated');
     }
 
-    // 2. Decode payload (base64)
+    // Decode JWT payload
     const payload = JSON.parse(
       atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'))
     );
+    const role = (payload.role || 'user').charAt(0).toUpperCase() + payload.role.slice(1);
+    document.getElementById('roleText').textContent = role;
 
-    // 3. Extract role and set text
-    const role = payload.role || 'User';
-    document.getElementById('roleText').textContent =
-      role.charAt(0).toUpperCase() + role.slice(1);
+    // Logout handler
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('token');
+      window.location.href = '/';
+    });
   </script>
 </body>
 </html>

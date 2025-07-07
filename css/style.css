@@ -5,7 +5,7 @@
 }
 
 body {
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
   background: #f6f5f7;
   display: flex;
   justify-content: center;
@@ -17,8 +17,7 @@ body {
 .container {
   background: #fff;
   border-radius: 10px;
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
-              0 10px 10px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   position: relative;
   width: 800px;
   max-width: 100%;
@@ -53,7 +52,6 @@ body {
   opacity: 1;
   visibility: visible;
 }
-
 
 .sign-up-container {
   left: 0;
@@ -249,10 +247,10 @@ button.ghost {
   background: #f1f1f1;
   border-radius: 30px;
   align-items: center;
-  justify-content: center;  /* center the pills horizontally */
-  max-width: 300px;         /* optional: control total width */
-  width: 100%;              /* takes full available or up to max-width */
-  margin: 0 auto;           /* auto‑center within parent */
+  justify-content: center; /* center the pills horizontally */
+  max-width: 300px; /* optional: control total width */
+  width: 100%; /* takes full available or up to max-width */
+  margin: 0 auto; /* auto‑center within parent */
 }
 
 /* Hide native radio inputs */
@@ -300,203 +298,215 @@ button.ghost {
 }
 
 .fp-card-container {
-    width: 100%;
-    max-width: 420px;
-    animation: slideIn 0.5s ease-out forwards;
+  width: 100%;
+  max-width: 420px;
+  animation: slideIn 0.5s ease-out forwards;
 }
 
 .fp-form-card {
-    background-color: #ffffff;
-    padding: 40px;
-    border-radius: 16px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .fp-form-card h2 {
-    font-size: 1.75rem;
-    color: #333;
-    text-align: center;
-    margin-bottom: -10px; /* Reduces space below heading */
+  font-size: 1.75rem;
+  color: #333;
+  text-align: center;
+  margin-bottom: -10px; /* Reduces space below heading */
 }
 
 .fp-form-card p {
-    font-size: 0.9rem;
-    color: #555;
-    text-align: center;
-    margin-bottom: 10px;
+  font-size: 0.9rem;
+  color: #555;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
 .fp-input-group {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .fp-input-group label {
-    font-weight: 600;
-    font-size: 0.9rem;
-    margin-bottom: 8px;
-    color: #333;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  color: #333;
 }
 
 .fp-input-wrapper {
-    display: flex;
-    align-items: center;
-    background-color: #f1f1f1;
-    border-radius: 20px;
-    padding: 0 15px;
-    transition: box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+  background-color: #f1f1f1;
+  border-radius: 20px;
+  padding: 0 15px;
+  transition: box-shadow 0.2s;
 }
 
 .fp-input-wrapper:focus-within {
-    box-shadow: 0 0 0 2px #ff416c;
+  box-shadow: 0 0 0 2px #ff416c;
 }
 
 .fp-input-wrapper .fp-icon {
-    font-size: 1rem;
-    margin-right: 10px;
-    color: #555;
+  font-size: 1rem;
+  margin-right: 10px;
+  color: #555;
 }
 
 .fp-input-wrapper input {
-    flex-grow: 1;
-    border: none;
-    outline: none;
-    background-color: transparent;
-    padding: 14px 0;
-    font-size: 1rem;
-    font-family: inherit;
+  flex-grow: 1;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  padding: 14px 0;
+  font-size: 1rem;
+  font-family: inherit;
 }
 
 .back-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    text-align: center;
-    font-size: 0.9rem;
-    color: #555;
-    text-decoration: none;
-    transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #555;
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
 
 .back-link:hover {
-    color: #ff4b2b;
+  color: #ff4b2b;
 }
 
 /* Animation for the form appearing */
 @keyframes slideIn {
-    from{opacity: 0; transform: translateY(20px);}
-    to{opacity: 1; transform: translateY(0);}
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ---------- OTP Screen ---------- */
 
 .otp-card-container {
-    width: 100%;
-    max-width: 420px;
-    animation: slideIn 0.5s ease-out forwards;
+  width: 100%;
+  max-width: 420px;
+  animation: slideIn 0.5s ease-out forwards;
 }
 
 .otp-form-card {
-    background-color: #ffffff;
-    padding: 40px;
-    border-radius: 16px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .otp-form-card h2 {
-    font-size: 1.75rem;
-    color: #333;
-    text-align: center;
-    margin-bottom: -10px; /* Reduces space below heading */
+  font-size: 1.75rem;
+  color: #333;
+  text-align: center;
+  margin-bottom: -10px; /* Reduces space below heading */
 }
 
 .otp-form-card p {
-    font-size: 0.9rem;
-    color: #555;
-    text-align: center;
-    margin-bottom: 10px;
+  font-size: 0.9rem;
+  color: #555;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
 .otp-input-group .otp-input-label {
-    font-weight: 600;
-    font-size: 0.9rem;
-    margin-bottom: 8px;
-    color: #333;
-    text-align: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  color: #333;
+  text-align: center;
 }
 
 .otp-boxes {
-    display: flex;
-    justify-content: center;
-    gap: 15px; /* Increased gap for better spacing */
+  display: flex;
+  justify-content: center;
+  gap: 15px; /* Increased gap for better spacing */
 }
 
 .otp-box {
-    width: 60px;
-    height: 60px;
-    border-radius: 12px;
-    border: 2px solid #ccc;
-    text-align: center;
-    font-size: 1.75rem;
-    font-family: inherit;
-    font-weight: 600;
-    outline: none;
-    transition: all 0.2s;
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  border: 2px solid #ccc;
+  text-align: center;
+  font-size: 1.75rem;
+  font-family: inherit;
+  font-weight: 600;
+  outline: none;
+  transition: all 0.2s;
 }
 
 .otp-box:focus {
-    border-color: #ff416c;
-    box-shadow: 0 0 0 2px #ff416c;
+  border-color: #ff416c;
+  box-shadow: 0 0 0 2px #ff416c;
 }
 
 .otp-resend-container {
-    text-align: center;
-    font-size: 0.9rem;
-    color: #555;
-    margin-top: 10px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 10px;
 }
 
 /* Hide resend link by default; only show when no longer .disabled */
 .otp-resend-link {
-    visibility: hidden;
-    font-weight: 600;
-    text-decoration: none;
-    transition: color 0.2s;
+  visibility: hidden;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s;
 }
 
 .otp-resend-link:not(.disabled) {
-    visibility: visible;
-    color: #ff416c;
-    cursor: pointer;
+  visibility: visible;
+  color: #ff416c;
+  cursor: pointer;
 }
 
 .otp-resend-link:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 /* Timer styling */
 .timer {
-    font-weight: 600;
-    margin-left: 8px;
-    visibility: visible;
+  font-weight: 600;
+  margin-left: 8px;
+  visibility: visible;
 }
 
 /* Hide timer when empty */
 .timer:empty {
-    visibility: hidden;
+  visibility: hidden;
 }
 
 /* Animation for the form appearing */
 @keyframes slideIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /*Reset Password page*/
@@ -585,17 +595,17 @@ button.ghost {
 }
 
 .icon.eye {
-  margin-left: 6px;           
-  font-size: 1.1rem;           
-  cursor: pointer;             
-  user-select: none;           
-  color: #666;                 
-  transition: color 0.2s ease; 
-  vertical-align: middle;     
+  margin-left: 6px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  user-select: none;
+  color: #666;
+  transition: color 0.2s ease;
+  vertical-align: middle;
 }
 
 .icon.eye:hover {
-  color: #ff416c;            
+  color: #ff416c;
 }
 
 /* Strength Meter */
@@ -628,7 +638,7 @@ button.ghost {
   transition: color 0.3s;
 }
 .rp-password-criteria li::before {
-  content: '❌';
+  content: "❌";
   margin-right: 8px;
   transition: content 0.3s;
 }
@@ -636,7 +646,7 @@ button.ghost {
   color: #28a745;
 }
 .rp-password-criteria li.valid::before {
-  content: '✅';
+  content: "✅";
 }
 
 /* Submit Button */
@@ -695,13 +705,20 @@ button.ghost {
 
 /* Animations */
 @keyframes slideIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Responsive tweaks */
 @media (max-width: 480px) {
-  .rp-form-card, .rp-form-card.rp-success {
+  .rp-form-card,
+  .rp-form-card.rp-success {
     padding: 30px 20px;
   }
   .rp-input-wrapper input {
@@ -716,29 +733,62 @@ button.ghost {
   display: none !important;
 }
 
+.header {
+  width: 100%;
+  padding: 1rem 2rem;
+  background: #ff416c;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
 
+.header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.logout-btn {
+  background: transparent;
+  border: 2px solid #fff;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+.logout-btn:hover {
+  background: #fff;
+  color: #ff416c;
+}
+
+/* Page */
 .welcome-page {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  flex-direction: column;
+  min-height: 100vh;
   background: #f6f5f7;
 }
-    
+
 .welcome-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
-  background: #fff;
-  padding: 40px;
-  border-radius: 16px;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+  padding: 2rem;
 }
 
 .welcome-box h1 {
-  margin-bottom: 16px;
+  margin-bottom: 1rem;
   font-size: 2rem;
   color: #333;
 }
-    
+
 .welcome-box p {
   color: #555;
 }
