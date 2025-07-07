@@ -7,9 +7,28 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body class="welcome-page">
-    <div class="welcome-box">
-        <h1>Welcome, Bro!</h1>
-        <p>You have successfully logged in.</p>
-    </div>
+  <div class="welcome-box">
+    <h1>Welcome, <span id="roleText">Guest</span>!</h1>
+    <p>You have successfully logged in.</p>
+  </div>
+
+  <script>
+    // 1. Grab token (redirect if missing)
+    const token = localStorage.getItem('token');
+    if (!token) {
+      window.location.href = '/';
+      throw new Error('No auth token');
+    }
+
+    // 2. Decode payload (base64)
+    const payload = JSON.parse(
+      atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'))
+    );
+
+    // 3. Extract role and set text
+    const role = payload.role || 'User';
+    document.getElementById('roleText').textContent =
+      role.charAt(0).toUpperCase() + role.slice(1);
+  </script>
 </body>
 </html>

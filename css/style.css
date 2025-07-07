@@ -715,3 +715,30 @@ button.ghost {
 [hidden] {
   display: none !important;
 }
+
+
+.welcome-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #f6f5f7;
+}
+    
+.welcome-box {
+  text-align: center;
+  background: #fff;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+}
+
+.welcome-box h1 {
+  margin-bottom: 16px;
+  font-size: 2rem;
+  color: #333;
+}
+    
+.welcome-box p {
+  color: #555;
+}
