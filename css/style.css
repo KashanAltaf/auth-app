@@ -453,3 +453,126 @@ button.ghost {
     from { opacity: 0; transform: translateY(20px); }
     to   { opacity: 1; transform: translateY(0); }
 }
+
+/*Reset Password page*/
+.rp-form-card-container {
+    width: 100%;
+    max-width: 420px;
+    animation: slideIn 0.5s ease-out forwards;
+}
+
+.rp-form-card {
+    background-color: var(--card-background-color);
+    padding: 40px;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.rp-form-card h2 {
+    font-size: 1.75rem;
+    color: var(--text-color);
+    text-align: center;
+    margin-bottom: -10px;
+}
+
+.rp-form-card p {
+    font-size: 0.9rem;
+    color: var(--text-secondary-color);
+    text-align: center;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.rp-input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.rp-input-group label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    color: var(--text-color);
+}
+
+.rp-input-wrapper {
+    display: flex;
+    align-items: center;
+    background-color: var(--input-background-color);
+    border-radius: var(--border-radius-lg);
+    padding: 0 15px;
+    transition: box-shadow 0.2s;
+}
+
+.rp-input-wrapper:focus-within {
+    box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+.rp-input-wrapper .icon {
+    font-size: 1.2rem;
+    margin-right: 10px;
+    color: var(--text-secondary-color);
+}
+
+.rp-input-wrapper input {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    padding: 14px 0;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.rp-eye-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 5px;
+    color: var(--text-secondary-color);
+    display: flex;
+    align-items: center;
+}
+
+.rp-password-strength {
+    height: 10px;
+    background-color: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: -10px;
+}
+
+.rp-strength-bar {
+    height: 100%;
+    width: 0;
+    background-color: var(--error-color);
+    transition: width 0.3s, background-color 0.3s;
+}
+
+.rp-password-criteria {
+    list-style-type: none;
+    padding-left: 0;
+    font-size: 0.85rem;
+    color: var(--text-secondary-color);
+    margin-top: -10px;
+}
+
+.rp-password-criteria li {
+    transition: color 0.3s;
+}
+
+.rp-password-criteria li::before {
+    content: '❌';
+    margin-right: 8px;
+}
+
+.rp-password-criteria li.valid {
+    color: var(--success-color);
+}
+
+.rp-password-criteria li.valid::before {
+    content: '✅';
+}

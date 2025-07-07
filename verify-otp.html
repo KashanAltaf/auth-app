@@ -84,7 +84,7 @@
       );
       if (res.data.ok) {
         // success → next page
-        window.location.href = `/reset-password.html?email=${encodeURIComponent(userEmail)}`;
+        window.location.href = `/reset_password.html?email=${encodeURIComponent(userEmail)}`;
       } else {
         // failure → toast
         const msg = res.data.err === "expired"
