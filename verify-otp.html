@@ -39,41 +39,126 @@
     </main>
 
 
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        const userEmail = params.get("email") || "";
-        document.getElementById("userEmail").textContent = userEmail;
+<!-- add this above your existing <script> block -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-        const boxes = [...document.querySelectorAll(".otp-boxes input")];
-        boxes.forEach((box, i) => {
-            box.addEventListener("input", e => {
-                e.target.value = e.target.value.replace(/[^0-9]/g, "");
-                if (e.target.value && i < boxes.length - 1) {
-                  boxes[i + 1].focus();
-                }
-            });
-            box.addEventListener("keydown", e => {
-                if (e.key === "Backspace" && !box.value && i > 0) {
-                    boxes[i - 1].focus();
-                }
-            });
-        });
+<script>
+  const params      = new URLSearchParams(window.location.search);
+  const userEmail   = params.get("email") || "";
+  document.getElementById("userEmail").textContent = userEmail;
 
+  // OTP input boxes
+  const boxes = [...document.querySelectorAll(".otp-box")];
+  boxes.forEach((box, i) => {
+    box.value = ""; // clear on load/back
+    box.addEventListener("input", e => {
+      e.target.value = e.target.value.replace(/[^0-9]/g, "");
+      if (e.target.value && i < boxes.length - 1) boxes[i+1].focus();
+    });
+    box.addEventListener("keydown", e => {
+      if (e.key === "Backspace" && !box.value && i > 0) boxes[i-1].focus();
+    });
+  });
 
-        document.getElementById("otpForm").addEventListener("submit", e => {
-            e.preventDefault();
-            const otp = boxes.map(b => b.value).join("");
-            if(otp.length != 4){
-                Toastify({
-                    text: "Please enter al 4 digits.",
-                    duration: 3000,
-                    gravity: 'top',
-                    position: 'center',
-                    backgroundColor: '#e74c3c'
-                }).showToast();
-                return;
-            }
-            window.location.href = `/reset-password.html?email=${encodeURIComponent(userEmail)}`;
-        });
-    </script>
+  // Always clear boxes if navigating back
+  window.addEventListener("pageshow", () => {
+    boxes.forEach(b => b.value = "");
+  });
+
+  // Verify OTP on submit
+  document.getElementById("otpForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const otp = boxes.map(b => b.value).join("");
+    if (otp.length !== 4) {
+      return Toastify({
+        text: "Please enter all 4 digits.",
+        duration: 3000, gravity: "top", position: "center",
+        backgroundColor: "#e74c3c"
+      }).showToast();
+    }
+
+    try {
+      const res = await axios.post("/verify-otp",
+        { email: userEmail, otp },
+        { headers: { "X-Requested-With": "fetch" } }
+      );
+      if (res.data.ok) {
+        // success → next page
+        window.location.href = `/reset-password.html?email=${encodeURIComponent(userEmail)}`;
+      } else {
+        // failure → toast
+        const msg = res.data.err === "expired"
+          ? "OTP has expired."
+          : res.data.err === "mismatch"
+          ? "Email mismatch."
+          : "Invalid OTP. Please try again.";
+        Toastify({
+          text: `❌ ${msg}`, duration:3000,
+          gravity:"top", position:"center",
+          backgroundColor:"#e74c3c"
+        }).showToast();
+      }
+    } catch (err) {
+      Toastify({
+        text: "Server error. Please try again.",
+        duration:3000, gravity:"top",
+        position:"center", backgroundColor:"#e74c3c"
+      }).showToast();
+    }
+  });
+
+  // Resend timer & handler
+  const resendLink = document.getElementById("resendLink");
+  const timerSpan  = document.getElementById("timer");
+  let secondsLeft  = 60, timerId;
+
+  function startTimer() {
+    resendLink.classList.add("disabled");
+    resendLink.setAttribute("aria-disabled","true");
+    timerSpan.textContent = `(${secondsLeft}s)`;
+    clearInterval(timerId);
+    timerId = setInterval(() => {
+      secondsLeft--;
+      if (secondsLeft <= 0) {
+        clearInterval(timerId);
+        timerSpan.textContent = "";
+        resendLink.classList.remove("disabled");
+        resendLink.removeAttribute("aria-disabled");
+      } else {
+        timerSpan.textContent = `(${secondsLeft}s)`;
+      }
+    }, 1000);
+  }
+
+  resendLink.addEventListener("click", async e => {
+    e.preventDefault();
+    if (resendLink.classList.contains("disabled")) return;
+    secondsLeft = 60;
+    startTimer();
+
+    try {
+      const res = await axios.post("/send-otp",
+        { email: userEmail },
+        { headers: { "X-Requested-With": "fetch" } }
+      );
+      Toastify({
+        text: res.data.ok
+          ? "OTP resent successfully."
+          : "Failed to resend OTP.",
+        duration:3000, gravity:"top",
+        position:"center",
+        backgroundColor: res.data.ok ? "#2ecc71" : "#e74c3c"
+      }).showToast();
+    } catch {
+      Toastify({
+        text: "Network error. Try again.",
+        duration:3000, gravity:"top",
+        position:"center", backgroundColor:"#e74c3c"
+      }).showToast();
+    }
+  });
+
+  // Kick off initial countdown
+  startTimer();
+</script>
 </body>
