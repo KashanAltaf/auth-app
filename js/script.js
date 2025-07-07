@@ -40,53 +40,53 @@ function showToast(message, type = 'info') {
   }).showToast();
 }
 
-/* ------------ AJAX: Sign‑Up ------------ */
+/* ------------ AJAX: Sign‑Up (using Axios) ------------ */
 document.getElementById('signupForm').addEventListener('submit', async e => {
   e.preventDefault();
   const formData = new FormData(e.target);
 
-  const res = await fetch('/register', {
-    method: 'POST',
-    headers: { 'x-requested-with': 'fetch' },
-    body: formData
-  })
-  .then(r => r.json())
-  .catch(() => ({ ok: false, err: 'network' }));
+  try {
+    const res = await axios.post('/register', formData, {
+      headers: { 'X-Requested-With': 'fetch' }
+    });
 
-  if (res.ok) {
-    showToast('✅ Registration successful! Please log in.', 'success');
-    container.classList.remove('right-panel-active'); // switch to Sign‑In
-    e.target.reset();
-  } else {
-    const msg =
-      res.err === 'weakpass'
-        ? '❌ Weak password!'
-        : res.err === 'register'
-        ? '❌ Email already exists. Choose another.'
-        : '❌ Network error. Please try again.';
-    showToast(msg, 'error');
-    container.classList.add('right-panel-active');   // stay on Sign‑Up
+    if (res.data.ok) {
+      showToast('✅ Registration successful! Please log in.', 'success');
+      container.classList.remove('right-panel-active'); // switch to Sign‑In
+      e.target.reset();
+    } else {
+      const msg =
+        res.data.err === 'weakpass'
+          ? '❌ Weak password!'
+          : res.data.err === 'register'
+          ? '❌ Email already exists. Choose another.'
+          : '❌ Registration error. Please try again.';
+      showToast(msg, 'error');
+      container.classList.add('right-panel-active');   // stay on Sign‑Up
+    }
+  } catch (err) {
+    showToast('❌ Network error. Please try again.', 'error');
   }
 });
 
-/* ------------ AJAX: Sign‑In ------------ */
+/* ------------ AJAX: Sign‑In (using Axios) ------------ */
 document.getElementById('loginForm').addEventListener('submit', async e => {
   e.preventDefault();
   const formData = new FormData(e.target);
 
-  const res = await fetch('/login', {
-    method: 'POST',
-    headers: { 'x-requested-with': 'fetch' },
-    body: formData
-  })
-  .then(r => r.json())
-  .catch(() => ({ ok: false, err: 'network' }));
+  try {
+    const res = await axios.post('/login', formData, {
+      headers: { 'X-Requested-With': 'fetch' }
+    });
 
-  if (res.ok && res.token) {
-    // store JWT for later authenticated requests
-    localStorage.setItem('token', res.token);
-    window.location.href = '/welcome.html';
-  } else {
-    showToast('❌ Invalid login. Please try again.', 'error');
+    if (res.data.ok && res.data.token) {
+      // store JWT for later authenticated requests
+      localStorage.setItem('token', res.data.token);
+      window.location.href = '/welcome.html';
+    } else {
+      showToast('❌ Invalid login. Please try again.', 'error');
+    }
+  } catch (err) {
+    showToast('❌ Network error. Please try again.', 'error');
   }
 });
