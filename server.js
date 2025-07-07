@@ -205,9 +205,8 @@ app.post('/verify-otp', parseForm, (req, res) => {
 });
 
 // Reset Password route
-app.post('/reset-password', parseForm, async (req, res) => {
+app.post('/reset_password', parseForm, async (req, res) => {
   const { email, newPassword } = req.body;
-  // Validate
   if (!email || !newPassword || newPassword.length < 8) {
     return res.json({ ok: false, err: 'weakpass' });
   }
@@ -219,8 +218,18 @@ app.post('/reset-password', parseForm, async (req, res) => {
   if (!strong) {
     return res.json({ ok: false, err: 'weakpass' });
   }
-  // Update password
   try {
+    // 1. Fetch current hash
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.json({ ok: false, err: 'no_user' });
+    }
+    // 2. Prevent same-as-old
+    const same = await bcrypt.compare(newPassword, user.passwordHash);
+    if (same) {
+      return res.json({ ok: false, err: 'samepass' });
+    }
+    // 3. Hash & update
     const passwordHash = await bcrypt.hash(newPassword, 12);
     await User.updateOne({ email }, { $set: { passwordHash } });
     return res.json({ ok: true });
@@ -229,6 +238,7 @@ app.post('/reset-password', parseForm, async (req, res) => {
     return res.json({ ok: false, err: 'server' });
   }
 });
+
 
 // Protected welcome page
 app.get('/welcome.html', (req, res, next) => {
