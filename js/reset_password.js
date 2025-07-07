@@ -1,46 +1,118 @@
-document.getElementById('resetPasswordForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
+    // Helpers
+    const form        = document.getElementById('resetPasswordForm');
+    const newPwdInput = document.getElementById('newPassword');
+    const confirmInput= document.getElementById('confirmPassword');
+    const strengthBar = document.querySelector('.rp-strength-bar');
+    const criteriaEls = document.querySelectorAll('#criteriaList li');
+    const successSection = document.getElementById('successMessage');
+    src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"
 
-  const newPass = document.getElementById('newPassword').value.trim();
-  const confirmPass = document.getElementById('confirmPassword').value.trim();
-  const email = sessionStorage.getItem('resetEmail'); // should be set during OTP step
+    // Eye‑toggle buttons
+    document.querySelectorAll('.rp-eye-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const wrapper = btn.closest('.rp-input-wrapper');
+        const input   = wrapper.querySelector('input');
+        btn.classList.toggle('active');
+        if (btn.classList.contains('active')) {
+          input.type = 'text';
+        } else {
+          input.type = 'password';
+        }
+      });
+    });
 
-  if (!email) return alert("No email found. Please retry the process.");
+    // Password strength rules
+    const rules = {
+      length:    pwd => pwd.length >= 8,
+      uppercase: pwd => /[A-Z]/.test(pwd),
+      number:    pwd => /[0-9]/.test(pwd),
+      special:   pwd => /[^A-Za-z0-9]/.test(pwd)
+    };
 
-  if (newPass !== confirmPass) return alert("Passwords do not match.");
-
-  const strong =
-    /[A-Z]/.test(newPass) &&
-    /[a-z]/.test(newPass) &&
-    /[0-9]/.test(newPass) &&
-    /[^A-Za-z0-9]/.test(newPass) &&
-    newPass.length >= 8;
-
-  const namePart = email.split('@')[0].replace(/[^a-z]/gi, '').toLowerCase();
-  let containsName = false;
-  for (let i = 0; i <= namePart.length - 3; i++) {
-    if (newPass.toLowerCase().includes(namePart.slice(i, i + 3))) {
-      containsName = true;
-      break;
+    function updateStrength() {
+      const pwd = newPwdInput.value;
+      let passed = 0;
+      Object.entries(rules).forEach(([key, test]) => {
+        const el = document.querySelector(`#criteriaList li[data-criteria="${key}"]`);
+        if (test(pwd)) {
+          el.classList.add('valid');
+          passed++;
+        } else {
+          el.classList.remove('valid');
+        }
+      });
+      // Width = percent of rules passed
+      const pct = (passed / Object.keys(rules).length) * 100;
+      strengthBar.style.width = pct + '%';
+      // Change color based on strength
+      strengthBar.style.backgroundColor =
+        pct < 50 ? '#dc3545' :
+        pct < 75 ? '#f1c40f' :
+                   '#28a745';
     }
-  }
 
-  if (!strong || containsName) {
-    return alert("Password doesn't meet the security requirements.");
-  }
+    newPwdInput.addEventListener('input', updateStrength);
 
-  const res = await fetch('/reset-password', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, newPassword: newPass })
-  });
+    // Form submission
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      // Basic client‑side checks
+      if (confirmInput.value !== newPwdInput.value) {
+        return Toastify({
+          text: "Passwords do not match.",
+          duration: 3000,
+          gravity: "top",
+          position: "center",
+          backgroundColor: "#e74c3c"
+        }).showToast();
+      }
+      const strengthPct = parseInt(strengthBar.style.width);
+      if (strengthPct < 100) {
+        return Toastify({
+          text: "Password does not meet all criteria.",
+          duration: 3000,
+          gravity: "top",
+          position: "center",
+          backgroundColor: "#e74c3c"
+        }).showToast();
+      }
 
-  const result = await res.json();
+      try {
+        const res = await axios.post('/reset_password', {
+          email: new URLSearchParams(window.location.search).get('email'),
+          newPassword: newPwdInput.value
+        }, {
+          headers: { "X-Requested-With": "fetch" }
+        });
+        if (res.data.ok) {
+          // Hide form, show success
+          form.hidden = true;
+          successSection.hidden = false;
+        } else {
+          Toastify({
+            text: `Error: ${res.data.err}`,
+            duration: 3000,
+            gravity: "top",
+            position: "center",
+            backgroundColor: "#e74c3c"
+          }).showToast();
+        }
+      } catch (err) {
+        Toastify({
+          text: "Server error. Try again.",
+          duration: 3000,
+          gravity: "top",
+          position: "center",
+          backgroundColor: "#e74c3c"
+        }).showToast();
+      }
+    });
 
-  if (result.ok) {
-    alert("✅ Password reset successful. Please log in.");
-    window.location.href = "/";
-  } else {
-    alert("❌ Something went wrong.");
-  }
-});
+    // Clear form & hide success if user navigates back
+    window.addEventListener('pageshow', () => {
+      form.hidden = false;
+      successSection.hidden = true;
+      form.reset();
+      strengthBar.style.width = '0%';
+      criteriaEls.forEach(li => li.classList.remove('valid'));
+    });
