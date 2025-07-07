@@ -455,124 +455,223 @@ button.ghost {
 }
 
 /*Reset Password page*/
+/* Container */
 .rp-form-card-container {
-    width: 100%;
-    max-width: 420px;
-    animation: slideIn 0.5s ease-out forwards;
+  width: 90%;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 20px 0;
+  animation: slideIn 0.5s ease-out forwards;
 }
 
-.rp-form-card {
-    background-color: var(--card-background-color);
-    padding: 40px;
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow);
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+/* Card Base */
+.rp-form-card,
+.rp-form-card.rp-success {
+  background: #ffffff;
+  padding: 40px 30px;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: transform 0.3s, opacity 0.3s;
 }
 
-.rp-form-card h2 {
-    font-size: 1.75rem;
-    color: var(--text-color);
-    text-align: center;
-    margin-bottom: -10px;
+/* Headings & Text */
+.rp-form-card h2,
+.rp-form-card.rp-success h2 {
+  font-size: 1.75rem;
+  color: #333;
+  text-align: center;
+  margin-bottom: -5px;
 }
 
-.rp-form-card p {
-    font-size: 0.9rem;
-    color: var(--text-secondary-color);
-    text-align: center;
-    line-height: 1.5;
-    margin-bottom: 10px;
+.rp-form-card p,
+.rp-form-card.rp-success p {
+  font-size: 0.95rem;
+  color: #555;
+  text-align: center;
+  line-height: 1.4;
+  margin-bottom: 10px;
 }
 
+/* Input Group */
 .rp-input-group {
-    display: flex;
-    flex-direction: column;
+  position: relative;
 }
 
 .rp-input-group label {
-    font-weight: 600;
-    font-size: 0.9rem;
-    margin-bottom: 8px;
-    color: var(--text-color);
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+  color: #333;
+  display: block;
 }
 
 .rp-input-wrapper {
-    display: flex;
-    align-items: center;
-    background-color: var(--input-background-color);
-    border-radius: var(--border-radius-lg);
-    padding: 0 15px;
-    transition: box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+  background: #f1f1f1;
+  border-radius: 20px;
+  padding: 0 12px;
+  border: 2px solid transparent;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .rp-input-wrapper:focus-within {
-    box-shadow: 0 0 0 2px var(--primary-color);
+  border-color: #ff416c;
+  box-shadow: 0 0 0 3px rgba(255, 65, 108, 0.2);
 }
 
-.rp-input-wrapper .icon {
-    font-size: 1.2rem;
-    margin-right: 10px;
-    color: var(--text-secondary-color);
+.rp-icon {
+  font-size: 1.2rem;
+  margin-right: 10px;
+  color: #555;
 }
 
 .rp-input-wrapper input {
-    flex-grow: 1;
-    border: none;
-    outline: none;
-    background-color: transparent;
-    padding: 14px 0;
-    font-size: 1rem;
-    font-family: inherit;
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 14px 0;
+  font-size: 1rem;
+  font-family: inherit;
 }
 
+/* Eye toggle button */
 .rp-eye-toggle {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0 5px;
-    color: var(--text-secondary-color);
-    display: flex;
-    align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 6px;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s;
+}
+.rp-eye-toggle:hover {
+  transform: scale(1.1);
+}
+.eye-off-icon {
+  display: none;
+}
+.rp-eye-toggle.active .eye-icon {
+  display: none;
+}
+.rp-eye-toggle.active .eye-off-icon {
+  display: block;
 }
 
+/* Strength Meter */
 .rp-password-strength {
-    height: 10px;
-    background-color: #eee;
-    border-radius: 5px;
-    overflow: hidden;
-    margin-top: -10px;
+  width: 100%;
+  height: 8px;
+  background: #eee;
+  border-radius: 5px;
+  overflow: hidden;
+  margin: -10px 0 10px;
 }
-
 .rp-strength-bar {
-    height: 100%;
-    width: 0;
-    background-color: var(--error-color);
-    transition: width 0.3s, background-color 0.3s;
+  height: 100%;
+  width: 0%;
+  background: #dc3545;
+  transition: width 0.4s ease, background-color 0.4s ease;
 }
 
+/* Criteria List */
 .rp-password-criteria {
-    list-style-type: none;
-    padding-left: 0;
-    font-size: 0.85rem;
-    color: var(--text-secondary-color);
-    margin-top: -10px;
+  list-style: none;
+  padding-left: 0;
+  font-size: 0.85rem;
+  color: #555;
+  margin-top: -5px;
+  margin-bottom: 15px;
 }
-
 .rp-password-criteria li {
-    transition: color 0.3s;
+  margin: 4px 0;
+  transition: color 0.3s;
 }
-
 .rp-password-criteria li::before {
-    content: '❌';
-    margin-right: 8px;
+  content: '❌';
+  margin-right: 8px;
+  transition: content 0.3s;
 }
-
 .rp-password-criteria li.valid {
-    color: var(--success-color);
+  color: #28a745;
+}
+.rp-password-criteria li.valid::before {
+  content: '✅';
 }
 
-.rp-password-criteria li.valid::before {
-    content: '✅';
+/* Submit Button */
+.rp-submit {
+  background: #ff416c;
+  color: #fff;
+  border: none;
+  padding: 14px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+.rp-submit:hover {
+  background: #ff2e53;
+}
+.rp-submit:active {
+  transform: scale(0.97);
+}
+
+/* Success State */
+.rp-form-card.rp-success {
+  align-items: center;
+  text-align: center;
+}
+.rp-success-login-button {
+  display: inline-block;
+  margin-top: 15px;
+  background: #28a745;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 30px;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.1s;
+}
+.rp-success-login-button:hover {
+  background: #218838;
+}
+.rp-success-login-button:active {
+  transform: scale(0.97);
+}
+
+/* Back Button (if any) */
+#backToOtp {
+  display: block;
+  margin: 15px auto 0;
+  color: #555;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+#backToOtp:hover {
+  color: #ff416c;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive tweaks */
+@media (max-width: 480px) {
+  .rp-form-card, .rp-form-card.rp-success {
+    padding: 30px 20px;
+  }
+  .rp-input-wrapper input {
+    padding: 12px 0;
+  }
+  .rp-submit {
+    padding: 12px 0;
+  }
 }
