@@ -539,27 +539,18 @@ button.ghost {
   font-family: inherit;
 }
 
-/* Eye toggle button */
-.rp-eye-toggle {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0 6px;
-  display: flex;
-  align-items: center;
-  transition: transform 0.2s;
+.icon.eye {
+  margin-left: 6px;           
+  font-size: 1.1rem;           
+  cursor: pointer;             
+  user-select: none;           
+  color: #666;                 
+  transition: color 0.2s ease; 
+  vertical-align: middle;     
 }
-.rp-eye-toggle:hover {
-  transform: scale(1.1);
-}
-.eye-off-icon {
-  display: none;
-}
-.rp-eye-toggle.active .eye-icon {
-  display: none;
-}
-.rp-eye-toggle.active .eye-off-icon {
-  display: block;
+
+.icon.eye:hover {
+  color: #ff416c;            
 }
 
 /* Strength Meter */
